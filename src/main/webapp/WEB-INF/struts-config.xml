@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN" "http://struts.apache.org/dtds/struts-config_1_3.dtd" >
+<struts-config> 
+
+	<form-beans>
+		<form-bean name="loginForm" type="com.ek.strutsdemo.struts.form.LoginForm"></form-bean>
+		<!-- 动态ActionForm 不需要创建真实的form类-->
+		<form-bean name="loginForm2" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="username" type="java.lang.String"></form-property>
+			<form-property name="password" type="java.lang.String"></form-property>
+		</form-bean>
+	</form-beans>
+	
+	
+	
+	
+	
+	
+	<!-- 全局exceptions -->
+	<global-exceptions>
+ 		<exception
+ 			key="myerror"
+ 			path="/error2.jsp" 
+ 			type="java.lang.NumberFormatException" />
+ 	</global-exceptions>
+ 	
+	<!-- 全局forward -->
+	<global-forwards>
+		<forward name="error"  path="/error.jsp" redirect="true" />
+ 	</global-forwards>
+ 	
+ 	
+		
+	
+	
+	
+	<!-- 
+	attribute: 把actionForm放在request 或 session中时 给的名称 取的时候就用getAttribute("loginForm");
+	name : actionForm的名称 和form-bean的name 属性相关 
+	scope : 与name伴随 actionForm的保存范围 默认session 设置request , 可以避免再点添加的时候数据还在
+	-->
+	<action-mappings> 
+		<action 
+		    attribute="loginForm"
+		    name="loginForm"  
+		    scope="request"
+		    
+			input="/login.jsp" 
+			path="/login"
+			type="com.ek.strutsdemo.struts.action.LoginAction">
+			<forward name="success" path="/success.jsp"/>
+		</action>
+		
+		<action 
+			parameter="method"
+			path="/department"
+			type="com.ek.strutsdemo.struts.action.DepartmentAction">
+		</action>
+		
+		<action 
+			parameter="defindex"
+			path="/indextiles"
+			type="org.apache.struts.actions.ForwardAction"></action><!-- parameter指向的是tiles-defs.xml中配置的 -->
+		<action 
+			parameter="mainlist"
+			path="/mainlist"
+			type="org.apache.struts.actions.ForwardAction"></action>
+	</action-mappings>
+	
+	
+	
+	
+	
+	
+	
+	<!-- 国际化资源文件 (不加后缀)加载的是这一类前缀相同的资源文件-->
+	<message-resources parameter="ApplictionResources"></message-resources>
+	
+	<!-- 想要用另一类配置文件的话 加一个key  在message中用bundle 绑定key值-->
+	<message-resources key="display" parameter="DisplayResources"></message-resources>
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- struts 插件 -->
+	<plug-in className="com.ek.strutsdemo.struts.plugin.MyPlugIn">
+		<set-property property="testMassage" value="testMassage!!!!!!!!!!!!!!!"/>
+	</plug-in>
+	
+	<plug-in className="org.apache.struts.tiles.TilesPlugin">
+		<set-property property="definitions-config"  value="/WEB-INF/tiles-defs.xml"/>
+	</plug-in>
+	
+	
+</struts-config>
